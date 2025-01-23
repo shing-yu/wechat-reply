@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 import os
 import hashlib
 from lxml import etree
-import toml
+import tomli as toml
 import time
 import logging
 from starlette.responses import PlainTextResponse
@@ -25,7 +25,7 @@ app = FastAPI()
 logger = logging.getLogger('uvicorn.error')
 logger.setLevel(logging.INFO)
 
-with open("static.toml", "r") as f:
+with open("static.toml", "r", encoding="utf-8") as f:
     # 读取静态自动回复
     statics = toml.loads(f.read())
 
