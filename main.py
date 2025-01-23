@@ -21,7 +21,7 @@ app = FastAPI()
 
 with open("static.toml", "r") as f:
     # 读取静态自动回复
-    statics = tomllib.loads(f.read())
+    statics = toml.loads(f.read())
 
 
 def check_signature(token: str, signature: str, timestamp: str, nonce: str) -> bool:
