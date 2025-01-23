@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 import os
 import hashlib
 from lxml import etree
-import tomllib
+import toml
 import time
 
 load_dotenv()
