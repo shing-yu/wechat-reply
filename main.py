@@ -7,6 +7,7 @@ from lxml import etree
 import tomli as toml
 import time
 import logging
+# noinspection PyPackageRequirements
 from starlette.responses import PlainTextResponse
 
 load_dotenv()
@@ -81,8 +82,19 @@ async def auto_reply(request: Request):
     # 将结果转为字典
     message = {child.tag: child.text for child in root}
 
-    if message["MsgType"] != "text":
-        # 如果不是文本消息，直接返回success
+    if message["MsgType"] == "text":
+        # 如果是文本消息
+        pass
+    elif message["MsgType"] == "event":
+        # 如果是事件消息，检测类型
+        if message["Event"] == "subscribe":
+            # 如果是订阅事件
+            response = create_message(message, "感谢关注星隅喵~")
+            return response
+        else:
+            return "success"
+    else:
+        # 其他消息类型
         return "success"
 
     if message["Content"] in statics:
