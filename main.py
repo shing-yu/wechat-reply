@@ -90,4 +90,4 @@ async def auto_reply(request: Request):
     return "success"
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=23333)
+    uvicorn.run(app, host="0.0.0.0", port=2333)
