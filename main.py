@@ -7,6 +7,7 @@ from lxml import etree
 import toml
 import time
 import logging
+from starlette.responses import PlainTextResponse
 
 load_dotenv()
 
@@ -67,9 +68,10 @@ async def url_verify(signature: str, timestamp: str, nonce: str, echostr: str):
     # 验证URL
     if check_signature(TOKEN, signature, timestamp, nonce):
         logger.info("验证成功")
-        return echostr
+        return PlainTextResponse(echostr)
     else:
         logger.info("验证失败")
+
 
 @app.post("/")
 async def auto_reply(request: Request):
