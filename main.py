@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Request
+import uvicorn
 from dotenv import load_dotenv
 import os
 import hashlib
@@ -87,3 +88,6 @@ async def auto_reply(request: Request):
         pass
 
     return "success"
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=23333)
