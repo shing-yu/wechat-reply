@@ -6,6 +6,7 @@ import hashlib
 from lxml import etree
 import toml
 import time
+import logging
 
 load_dotenv()
 
@@ -19,6 +20,9 @@ if not APPID or not APPSECRET:
 if not TOKEN:
     raise ValueError("TOKEN不能为空；请在环境变量中设置。")
 app = FastAPI()
+
+logger = logging.getLogger('uvicorn.error')
+logger.setLevel(logging.INFO)
 
 with open("static.toml", "r") as f:
     # 读取静态自动回复
@@ -62,10 +66,10 @@ def create_message(message: dict, text: str) -> str:
 async def url_verify(signature: str, timestamp: str, nonce: str, echostr: str):
     # 验证URL
     if check_signature(TOKEN, signature, timestamp, nonce):
+        logger.info("验证成功")
         return echostr
     else:
-        print("URL验证失败")
-
+        logger.info("验证失败")
 
 @app.post("/")
 async def auto_reply(request: Request):
