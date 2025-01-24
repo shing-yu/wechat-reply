@@ -100,7 +100,7 @@ async def auto_reply(request: Request):
     if message["Content"] in statics:
         # 如果是静态自动回复
         response = create_message(message, statics[message["Content"]])
-        return response
+        return PlainTextResponse(response)
     else:
         # 未来实现动态自动回复
         pass
