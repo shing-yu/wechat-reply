@@ -7,6 +7,7 @@ from lxml import etree
 import tomli as toml
 import time
 import logging
+import requests
 # noinspection PyPackageRequirements
 from starlette.responses import PlainTextResponse
 
@@ -64,6 +65,15 @@ def create_message(message: dict, text: str) -> str:
     return etree.tostring(root, encoding="utf-8").decode()
 
 
+def get_hitokoto() -> tuple:
+    """
+    获取一言
+    """
+    response = requests.get("https://v1.hitokoto.cn", timeout=4.5)
+    data = response.json()
+    return data["hitokoto"], data["from"]
+
+
 @app.get("/")
 async def url_verify(signature: str, timestamp: str, nonce: str, echostr: str):
     # 验证URL
@@ -101,6 +111,16 @@ async def auto_reply(request: Request):
         # 如果是静态自动回复
         response = create_message(message, statics[message["Content"]])
         return PlainTextResponse(response)
+    elif message["Content"] == "一言":
+        # 如果是一言
+        try:
+            hitokoto, from_ = get_hitokoto()
+            response = create_message(message, f"{hitokoto}\n——{from_}")
+            return PlainTextResponse(response)
+        except Exception as e:
+            logger.error("获取一言失败", e)
+            response = create_message(message, "获取一言API失败")
+            return PlainTextResponse(response)
     else:
         # 未来实现动态自动回复
         pass
