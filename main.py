@@ -71,7 +71,9 @@ def get_hitokoto() -> tuple:
     """
     response = requests.get("https://v1.hitokoto.cn", timeout=4.5)
     data = response.json()
-    return data["hitokoto"], data["from"]
+    hitokoto = data["hitokoto"]
+    from_ = data["from"] if data["from"] != "原创" else data["creator"]+"（原创）"
+    return hitokoto, from_
 
 
 @app.get("/")
